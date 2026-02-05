@@ -113,24 +113,30 @@ class SupabaseConstants {
 ### category_constants.dart
 ```dart
 enum ItemCategory {
-  tools('Tools', '🔧'),
-  kitchen('Kitchen', '🍳'),
-  outdoor('Outdoor', '🏕️'),
-  games('Games', '🎮');
+  tools,
+  kitchen,
+  outdoor,
+  games;
   
-  const ItemCategory(this.label, this.icon);
-  final String label;
-  final String icon;
+  String get label { /* Returns category label */ }
+  String get icon { /* Returns emoji icon */ }
+  String toDbString() { /* Converts to database string */ }
+  static ItemCategory fromString(String value) { /* Parses from string */ }
 }
 
 enum ItemStatus {
-  available('Available'),
-  onLoan('On Loan');
+  available,
+  onLoan;
   
-  const ItemStatus(this.label);
-  final String label;
+  String get label { /* Returns status label */ }
+  String toDbString() { /* Converts to database string */ }
+  static ItemStatus fromString(String value) { /* Parses from string */ }
 }
 ```
+
+**Note:** CategoryColors and StatusColors helper classes are defined in 
+`shared/theme/colors.dart`. When both are needed, import colors.dart with 
+an alias: `import '../../../../shared/theme/colors.dart' as theme_colors;`
 
 </details>
 
@@ -301,12 +307,13 @@ abstract class AppException implements Exception {
   AppException(this.message, [this.code]);
 }
 
-class AuthException extends AppException {
-  AuthException(String message, [String? code]) : super(message, code);
+// Renamed to avoid conflicts with Supabase's built-in exceptions
+class AppAuthException extends AppException {
+  AppAuthException(String message, [String? code]) : super(message, code);
 }
 
-class StorageException extends AppException {
-  StorageException(String message, [String? code]) : super(message, code);
+class AppStorageException extends AppException {
+  AppStorageException(String message, [String? code]) : super(message, code);
 }
 
 class NetworkException extends AppException {
@@ -318,9 +325,9 @@ class NetworkException extends AppException {
 ```dart
 class ErrorHandler {
   static String getUserFriendlyMessage(dynamic error) {
-    if (error is AuthException) {
+    if (error is AppAuthException) {
       return _handleAuthError(error);
-    } else if (error is StorageException) {
+    } else if (error is AppStorageException) {
       return _handleStorageError(error);
     }
     return 'An unexpected error occurred. Please try again.';
@@ -464,18 +471,32 @@ class ItemModel {
 **items_provider.dart**
 ```dart
 // Fetch items with filters
-final itemsProvider = StreamProvider.family<List<ItemModel>, ItemFilters>((ref, filters) {
-  return ref.read(realtimeServiceProvider).subscribeToItems(
-    status: filters.status,
+final itemsProvider = FutureProvider.family<List<ItemModel>, ItemsFilters>((ref, filters) {
+  final repository = ref.watch(itemRepositoryProvider);
+  return repository.fetchItems(
     category: filters.category,
+    status: filters.status,
+    searchQuery: filters.searchQuery,
+    limit: filters.limit,
   );
 });
 
-// Add item
-final addItemProvider = StateNotifierProvider<AddItemNotifier, AsyncValue<void>>((ref) {
-  return AddItemNotifier(ref.read(itemRepositoryProvider));
+// Item notifier for CRUD operations
+final itemNotifierProvider = StateNotifierProvider<ItemNotifier, AsyncValue<ItemModel?>>((ref) {
+  final repository = ref.watch(itemRepositoryProvider);
+  return ItemNotifier(repository);
 });
+
+// Filters class with factory methods
+class ItemsFilters {
+  factory ItemsFilters.all() { /* All items */ }
+  factory ItemsFilters.availableOnly() { /* Only available */ }
+  factory ItemsFilters.byCategory(ItemCategory category) { /* Filtered */ }
+}
 ```
+
+**Note:** Repository uses `.eq()` for filtering (not `.filter()`). 
+Auth state access: `authState.value?.user?.id` (not `.uid`)
 
 </details>
 

@@ -158,91 +158,100 @@ CREATE POLICY "Users can delete own item images"
 
 ### 3.1 Environment Configuration
 
-- [ ] **Create config/env.dart**
-  - [ ] Create `EnvConfig` class
-  - [ ] Load environment variables from `.env`
-  - [ ] Add getter methods for Supabase URL and keys
+- [✅] **Create config/env.dart**
+  - [✅] Create `EnvConfig` class
+  - [✅] Load environment variables from `.env`
+  - [✅] Add getter methods for Supabase URL and keys
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 ### 3.2 Core Constants
 
-- [ ] **Create core/constants/app_constants.dart**
-  - [ ] Define app name, version
-  - [ ] Define max file sizes
-  - [ ] Define pagination limits
+- [✅] **Create core/constants/app_constants.dart**
+  - [✅] Define app name, version
+  - [✅] Define max file sizes
+  - [✅] Define pagination limits
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
-- [ ] **Create core/constants/supabase_constants.dart**
-  - [ ] Define table names
-  - [ ] Define bucket names
-  - [ ] Define view names
+- [✅] **Create core/constants/supabase_constants.dart**
+  - [✅] Define table names
+  - [✅] Define bucket names
+  - [✅] Define view names
 
-- [ ] **Create core/constants/category_constants.dart**
-  - [ ] Create `ItemCategory` enum
-  - [ ] Create `ItemStatus` enum
-  - [ ] Add category icons and labels
+- [✅] **Create core/constants/category_constants.dart**
+  - [✅] Create `ItemCategory` enum
+  - [✅] Create `ItemStatus` enum
+  - [✅] Add category icons and labels
 
 ### 3.3 Core Services
 
-- [ ] **Create core/services/supabase_service.dart**
-  - [ ] Initialize Supabase client
-  - [ ] Create singleton instance
-  - [ ] Add initialization method
+- [✅] **Create core/services/supabase_service.dart**
+  - [✅] Initialize Supabase client
+  - [✅] Create singleton instance
+  - [✅] Add initialization method
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
-- [ ] **Create core/services/auth_service.dart**
-  - [ ] Implement `signUp()` method
-  - [ ] Implement `signIn()` method
-  - [ ] Implement `signOut()` method
-  - [ ] Implement `resetPassword()` method
-  - [ ] Add `currentUser` getter
-  - [ ] Add `authStateChanges` stream
+- [✅] **Create core/services/auth_service.dart**
+  - [✅] Implement `signUp()` method
+  - [✅] Implement `signIn()` method
+  - [✅] Implement `signOut()` method
+  - [✅] Implement `resetPassword()` method
+  - [✅] Add `currentUser` getter
+  - [✅] Add `authStateChanges` stream
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
-- [ ] **Create core/services/storage_service.dart**
-  - [ ] Implement `uploadItemImage()` method
-  - [ ] Implement `uploadAvatar()` method
-  - [ ] Implement `deleteImage()` method
-  - [ ] Implement `getPublicUrl()` method
+- [✅] **Create core/services/storage_service.dart**
+  - [✅] Implement `uploadItemImage()` method
+  - [✅] Implement `uploadAvatar()` method
+  - [✅] Implement `deleteImage()` method
+  - [✅] Implement `getPublicUrl()` method
   - 📚 Reference: [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)
 
-- [ ] **Create core/services/realtime_service.dart**
-  - [ ] Implement `subscribeToItems()` method
-  - [ ] Implement `subscribeToMessages()` method
-  - [ ] Implement `subscribeToConversations()` method
+- [✅] **Create core/services/realtime_service.dart**
+  - [✅] Implement `subscribeToItems()` method
+  - [✅] Implement `subscribeToMessages()` method
+  - [✅] Implement `subscribeToConversations()` method
   - 📚 Reference: [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)
 
 ### 3.4 Utilities
 
-- [ ] **Create core/utils/image_utils.dart**
-  - [ ] Implement `compressImage()` function
-  - [ ] Implement `generateThumbnail()` function
-  - [ ] Implement `isValidImage()` function
+- [✅] **Create core/utils/image_utils.dart**
+  - [✅] Implement `compressImage()` function
+  - [✅] Implement `generateThumbnail()` function
+  - [✅] Implement `isValidImage()` function
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
-- [ ] **Create core/utils/validators.dart**
-  - [ ] Implement `validateEmail()`
-  - [ ] Implement `validatePassword()`
-  - [ ] Implement `validateUsername()`
-  - [ ] Implement `validateTitle()`
+- [✅] **Create core/utils/validators.dart**
+  - [✅] Implement `validateEmail()`
+  - [✅] Implement `validatePassword()`
+  - [✅] Implement `validateUsername()`
+  - [✅] Implement `validateTitle()`
   - 📚 Reference: [SECURITY.md](SECURITY.md)
 
-- [ ] **Create core/utils/date_utils.dart**
-  - [ ] Implement `formatRelativeTime()`
-  - [ ] Implement `formatDate()`
-  - [ ] Implement `formatTime()`
+- [✅] **Create core/utils/date_utils.dart**
+  - [✅] Implement `formatRelativeTime()`
+  - [✅] Implement `formatDate()`
+  - [✅] Implement `formatTime()`
 
 ### 3.5 Error Handling
 
-- [ ] **Create core/errors/app_exception.dart**
-  - [ ] Create base `AppException` class
-  - [ ] Create `AuthException` class
-  - [ ] Create `StorageException` class
-  - [ ] Create `NetworkException` class
+- [✅] **Create core/errors/app_exception.dart**
+  - [✅] Create base `AppException` class
+  - [✅] Create `AppAuthException` class (renamed to avoid Supabase conflict)
+  - [✅] Create `AppStorageException` class (renamed to avoid Supabase conflict)
+  - [✅] Create `NetworkException` class
+  - [✅] Create `DatabaseException` class
+  - [✅] Create `ValidationException` class
+  - [✅] Create `UnknownException` class
 
-- [ ] **Create core/errors/error_handler.dart**
-  - [ ] Implement `getUserFriendlyMessage()` function
-  - [ ] Handle different error types
+- [✅] **Create core/errors/error_handler.dart**
+  - [✅] Implement `getUserFriendlyMessage()` function
+  - [✅] Handle different error types
+  - [✅] Handle Supabase auth errors
+  - [✅] Handle Supabase storage errors
+  - [✅] Handle Postgrest database errors
+  - [✅] Add error logging utility
+  - [✅] Add network error checker
+  - [✅] Add re-authentication checker
 
 ⏱️ **Estimated Time:** 4-5 hours
 
@@ -252,50 +261,63 @@ CREATE POLICY "Users can delete own item images"
 
 ### 4.1 Theme Setup
 
-- [ ] **Create shared/theme/colors.dart**
-  - [ ] Define primary colors
-  - [ ] Define category colors
-  - [ ] Define status colors (available/on loan)
+- [✅] **Create shared/theme/colors.dart**
+  - [✅] Define primary colors (Material Design 3)
+  - [✅] Define category colors (Tools, Kitchen, Outdoor, Games)
+  - [✅] Define status colors (available/on loan/unavailable)
+  - [✅] Define light/dark theme colors
+  - [✅] Create StatusColors helper class
+  - [✅] Create CategoryColors helper class
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
-- [ ] **Create shared/theme/text_styles.dart**
-  - [ ] Define `TextTheme` with all text styles
-  - [ ] Use Material Design 3 typography
+- [✅] **Create shared/theme/text_styles.dart**
+  - [✅] Define `TextTheme` with all text styles
+  - [✅] Use Material Design 3 typography
+  - [✅] Create custom app-specific styles (item cards, badges, chat, etc.)
+  - [✅] Implement getTextTheme() method for light/dark
 
-- [ ] **Create shared/theme/app_theme.dart**
-  - [ ] Implement `lightTheme()` method
-  - [ ] Implement `darkTheme()` method
-  - [ ] Configure Material 3 theming
+- [✅] **Create shared/theme/app_theme.dart**
+  - [✅] Implement `lightTheme()` method
+  - [✅] Implement `darkTheme()` method
+  - [✅] Configure Material 3 theming
+  - [✅] Configure all widget themes (buttons, inputs, cards, etc.)
 
 ### 4.2 Shared Widgets
 
-- [ ] **Create shared/widgets/loading_indicator.dart**
-  - [ ] Circular progress indicator
-  - [ ] Optional message parameter
+- [✅] **Create shared/widgets/loading_indicator.dart**
+  - [✅] LoadingIndicator widget with circular progress
+  - [✅] Optional message parameter
+  - [✅] SmallLoadingIndicator for inline use
 
-- [ ] **Create shared/widgets/error_widget.dart**
-  - [ ] Display error message
-  - [ ] Include retry button
-  - [ ] Show error icon
+- [✅] **Create shared/widgets/error_widget.dart**
+  - [✅] ErrorDisplay widget with error message
+  - [✅] Include retry button
+  - [✅] Show error icon
+  - [✅] CompactErrorDisplay for smaller spaces
 
-- [ ] **Create shared/widgets/empty_state.dart**
-  - [ ] Display empty state message
-  - [ ] Include illustration
-  - [ ] Optional action button
+- [✅] **Create shared/widgets/empty_state.dart**
+  - [✅] EmptyState widget with title and description
+  - [✅] Support for icon or custom illustration
+  - [✅] Optional action button
+  - [✅] CompactEmptyState for lists
 
-- [ ] **Create shared/widgets/custom_button.dart**
-  - [ ] Primary button style
-  - [ ] Loading state support
-  - [ ] Disabled state
+- [✅] **Create shared/widgets/custom_button.dart**
+  - [✅] CustomButton with primary/secondary/text variants
+  - [✅] Loading state support
+  - [✅] Disabled state
+  - [✅] Full width and icon support
 
-- [ ] **Create shared/widgets/custom_app_bar.dart**
-  - [ ] Reusable app bar component
-  - [ ] Support for actions
+- [✅] **Create shared/widgets/custom_app_bar.dart**
+  - [✅] CustomAppBar reusable component
+  - [✅] Support for actions and leading widget
+  - [✅] SearchAppBar variant
+  - [✅] BackAppBar variant
 
-- [ ] **Create shared/widgets/bottom_nav_bar.dart**
-  - [ ] 4 tabs: Home, Add, Chat, Profile
-  - [ ] Icons and labels
-  - [ ] Badge support for unread messages
+- [✅] **Create shared/widgets/bottom_nav_bar.dart**
+  - [✅] 4 tabs: Home, Add, Chat, Profile
+  - [✅] Icons and labels
+  - [✅] Badge support for unread messages
+  - [✅] Active/inactive icon variants
 
 ⏱️ **Estimated Time:** 3-4 hours
 
@@ -305,100 +327,138 @@ CREATE POLICY "Users can delete own item images"
 
 ### 5.1 Auth Data Layer
 
-- [ ] **Create features/auth/data/models/user_model.dart**
-  - [ ] Define `UserModel` class
-  - [ ] Implement `fromJson()` factory
-  - [ ] Implement `toJson()` method
+- [✅] **Create features/auth/data/models/user_model.dart**
+  - [✅] Define `UserModel` class with all profile fields
+  - [✅] Implement `fromJson()` factory
+  - [✅] Implement `toJson()` method
+  - [✅] Implement `toUpdateJson()` method
+  - [✅] Implement `copyWith()` method
+  - [✅] Add helper getters (displayName, isProfileComplete, hasAvatar)
+  - [✅] Override toString, ==, and hashCode
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
-- [ ] **Create features/auth/data/repositories/auth_repository.dart**
-  - [ ] Implement `signUp()` method
-  - [ ] Implement `signIn()` method
-  - [ ] Implement `signOut()` method
-  - [ ] Implement `getCurrentUser()` method
-  - [ ] Implement `resetPassword()` method
+- [✅] **Create features/auth/data/repositories/auth_repository.dart**
+  - [✅] Implement `signUp()` method with username metadata
+  - [✅] Implement `signIn()` method
+  - [✅] Implement `signOut()` method
+  - [✅] Implement `getCurrentUser()` method
+  - [✅] Implement `getCurrentAuthUser()` method
+  - [✅] Implement `getProfile()` method by userId
+  - [✅] Implement `updateProfile()` method
+  - [✅] Implement `isUsernameAvailable()` check
+  - [✅] Implement `resetPassword()` method
+  - [✅] Implement `updatePassword()` method
+  - [✅] Implement `resendVerificationEmail()` method
+  - [✅] Implement `isEmailVerified()` check
+  - [✅] Implement `authStateChanges` stream
+  - [✅] Implement `deleteAccount()` method
+  - [✅] Add comprehensive error handling
 
 ### 5.2 Auth Providers
 
-- [ ] **Create features/auth/presentation/providers/auth_provider.dart**
-  - [ ] Create `authStateProvider` (StreamProvider)
-  - [ ] Create `currentUserProvider` (FutureProvider)
-  - [ ] Create `authRepositoryProvider`
+- [✅] **Create features/auth/presentation/providers/auth_provider.dart**
+  - [✅] Create `authStateProvider` (StreamProvider)
+  - [✅] Create `currentUserProvider` (FutureProvider)
+  - [✅] Create `authRepositoryProvider`
+  - [✅] Create `isEmailVerifiedProvider`
+  - [✅] Create `usernameAvailabilityProvider` (family)
+  - [✅] Create `AuthNotifier` StateNotifier
+  - [✅] Create `authNotifierProvider`
+  - [✅] Create `authenticatedUserProvider`
+  - [✅] Create `isAuthenticatedProvider`
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 ### 5.3 Auth UI
 
-- [ ] **Create features/auth/presentation/screens/login_screen.dart**
-  - [ ] Build login form UI
-  - [ ] Email and password fields
-  - [ ] "Forgot Password" link
-  - [ ] "Sign Up" link
-  - [ ] Form validation
-  - [ ] Handle login logic
-  - [ ] Show loading state
-  - [ ] Display error messages
+- [✅] **Create features/auth/presentation/screens/login_screen.dart**
+  - [✅] Build login form UI with NeighborShare branding
+  - [✅] Email and password fields with validation
+  - [✅] Password show/hide toggle
+  - [✅] "Forgot Password" link
+  - [✅] "Sign Up" link
+  - [✅] Form validation with error display
+  - [✅] Handle login logic with Riverpod
+  - [✅] Show loading state
+  - [✅] Display error messages
+  - [✅] Email verification check
+  - [✅] Google Sign-In placeholder (future)
   - 📚 Reference: [FEATURES.md](FEATURES.md), [APP_FLOW.md](APP_FLOW.md)
 
-- [ ] **Create features/auth/presentation/screens/register_screen.dart**
-  - [ ] Build registration form UI
-  - [ ] Email, password, confirm password fields
-  - [ ] Username field with real-time validation
-  - [ ] Terms of service checkbox
-  - [ ] Password strength indicator
-  - [ ] Handle signup logic
-  - [ ] Navigate to email verification screen
+- [✅] **Create features/auth/presentation/screens/register_screen.dart**
+  - [✅] Build registration form UI
+  - [✅] Email, password, confirm password fields
+  - [✅] Username field with real-time validation
+  - [✅] Terms of service checkbox with links
+  - [✅] Password strength indicator
+  - [✅] Form validation
+  - [✅] Handle signup logic with Riverpod
+  - [✅] Navigate to email verification screen
+  - [✅] Error handling and display
   - 📚 Reference: [APP_FLOW.md](APP_FLOW.md)
 
-- [ ] **Create features/auth/presentation/screens/forgot_password_screen.dart**
-  - [ ] Email input field
-  - [ ] Send reset link button
-  - [ ] Success message display
-  - [ ] Handle password reset flow
+- [✅] **Create features/auth/presentation/screens/forgot_password_screen.dart**
+  - [✅] Email input field
+  - [✅] Send reset link button
+  - [✅] Success message display with instructions
+  - [✅] Step-by-step reset guide
+  - [✅] Resend email functionality
+  - [✅] Handle password reset flow
+  - [✅] Back to login navigation
+  - [✅] Error handling
 
-- [ ] **Create features/auth/presentation/screens/profile_setup_screen.dart**
-  - [ ] Avatar picker widget
-  - [ ] Username input (required)
-  - [ ] Full name input (optional)
-  - [ ] Neighborhood selection
-  - [ ] Bio text field (optional)
-  - [ ] Save profile logic
-  - [ ] Navigate to home feed
+- [✅] **Create features/auth/presentation/screens/profile_setup_screen.dart**
+  - [✅] Two-step progress indicator (Step 1 of 2, Step 2 of 2)
+  - [✅] Step 1: Avatar picker widget (placeholder for future)
+  - [✅] Step 1: Username input with availability check
+  - [✅] Step 1: Full name input (optional)
+  - [✅] Step 2: Neighborhood selection (required)
+  - [✅] Step 2: Bio text field (optional, 500 chars max)
+  - [✅] Back button navigation between steps
+  - [✅] Save profile logic with Riverpod
+  - [✅] Navigate to home feed on completion
+  - [✅] Error handling and display
   - 📚 Reference: [APP_FLOW.md](APP_FLOW.md)
 
 ### 5.4 Auth Widgets
 
-- [ ] **Create features/auth/presentation/widgets/password_field.dart**
-  - [ ] Password text field with show/hide toggle
-  - [ ] Validation support
-  - [ ] Strength indicator
+- [✅] **Create features/auth/presentation/widgets/password_field.dart**
+  - [✅] Password text field with show/hide toggle
+  - [✅] Validation support
+  - [✅] Optional strength indicator
+  - [✅] Real-time strength calculation
+  - [✅] Color-coded strength display (weak/medium/strong)
+  - [✅] Progress bar visualization
 
-- [ ] **Create features/auth/presentation/widgets/username_field.dart**
-  - [ ] Username text field
-  - [ ] Real-time availability check
-  - [ ] Visual feedback (checkmark/x)
+- [✅] **Create features/auth/presentation/widgets/username_field.dart**
+  - [✅] Username text field
+  - [✅] Real-time availability check with debouncing
+  - [✅] Visual feedback (checkmark/x/loading)
+  - [✅] Format validation
+  - [✅] Availability validation
+  - [✅] Helper text with availability status
 
 ### 5.5 Update main.dart
 
-- [ ] **Configure app initialization**
-  - [ ] Load environment variables
-  - [ ] Initialize Supabase
-  - [ ] Wrap app with ProviderScope
-  - [ ] Set up error handling
+- [✅] **Configure app initialization**
+  - [✅] Load environment variables
+  - [✅] Initialize Supabase
+  - [✅] Wrap app with ProviderScope
+  - [✅] Set up error handling
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 ### 5.6 Router Setup
 
-- [ ] **Create app/router.dart**
-  - [ ] Configure GoRouter
-  - [ ] Add auth redirect logic
-  - [ ] Define all routes
-  - [ ] Protected routes for authenticated users
+- [✅] **Create app/router.dart**
+  - [✅] Configure GoRouter
+  - [✅] Add auth redirect logic
+  - [✅] Define all routes
+  - [✅] Protected routes for authenticated users
   - 📚 Reference: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
-- [ ] **Create app/app.dart**
-  - [ ] Configure MaterialApp.router
-  - [ ] Apply theme
-  - [ ] Set up router
+- [✅] **Create app/app.dart**
+  - [✅] Configure MaterialApp.router
+  - [✅] Apply theme
+  - [✅] Set up router
 
 ⏱️ **Estimated Time:** 8-10 hours
 
@@ -408,166 +468,166 @@ CREATE POLICY "Users can delete own item images"
 
 ### 6.1 Items Data Layer
 
-- [ ] **Create features/items/data/models/item_model.dart**
-  - [ ] Define `ItemModel` class with all fields
-  - [ ] Implement `fromJson()` factory
-  - [ ] Implement `toJson()` method
-  - [ ] Include owner information
+- [✅] **Create features/items/data/models/item_model.dart**
+  - [✅] Define `ItemModel` class with all fields
+  - [✅] Implement `fromJson()` factory
+  - [✅] Implement `toJson()` method
+  - [✅] Include owner information
 
-- [ ] **Create features/items/data/repositories/item_repository.dart**
-  - [ ] Implement `fetchItems()` method
-  - [ ] Implement `createItem()` method
-  - [ ] Implement `updateItem()` method
-  - [ ] Implement `deleteItem()` method
-  - [ ] Implement `getItemById()` method
-  - [ ] Support category filtering
-  - [ ] Support search
+- [✅] **Create features/items/data/repositories/item_repository.dart**
+  - [✅] Implement `fetchItems()` method
+  - [✅] Implement `createItem()` method
+  - [✅] Implement `updateItem()` method
+  - [✅] Implement `deleteItem()` method
+  - [✅] Implement `getItemById()` method
+  - [✅] Support category filtering
+  - [✅] Support search
 
 ### 6.2 Items Providers
 
-- [ ] **Create features/items/presentation/providers/items_provider.dart**
-  - [ ] Create `itemsStreamProvider` with Realtime
-  - [ ] Create `itemsByCategoryProvider`
-  - [ ] Create `searchItemsProvider`
-  - [ ] Handle loading/error states
+- [✅] **Create features/items/presentation/providers/items_provider.dart**
+  - [✅] Create `itemsStreamProvider` with Realtime
+  - [✅] Create `itemsByCategoryProvider`
+  - [✅] Create `searchItemsProvider`
+  - [✅] Handle loading/error states
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
-- [ ] **Create features/items/presentation/providers/my_items_provider.dart**
-  - [ ] Fetch current user's items
-  - [ ] Support status filtering
+- [✅] **Create features/items/presentation/providers/my_items_provider.dart**
+  - [✅] Fetch current user's items
+  - [✅] Support status filtering
 
 ### 6.3 Items UI - Feed Screen
 
-- [ ] **Create features/items/presentation/screens/item_feed_screen.dart**
-  - [ ] App bar with search icon
-  - [ ] Category filter chips (horizontal scroll)
-  - [ ] Grid view of items (2 columns)
-  - [ ] Pull-to-refresh functionality
-  - [ ] Infinite scroll / pagination
-  - [ ] Empty state when no items
-  - [ ] Loading skeleton
-  - [ ] FAB for adding item
+- [✅] **Create features/items/presentation/screens/item_feed_screen.dart**
+  - [✅] App bar with search icon
+  - [✅] Category filter chips (horizontal scroll)
+  - [✅] Grid view of items (2 columns)
+  - [✅] Pull-to-refresh functionality
+  - [✅] Infinite scroll / pagination
+  - [✅] Empty state when no items
+  - [✅] Loading skeleton
+  - [✅] FAB for adding item
   - 📚 Reference: [FEATURES.md](FEATURES.md), [APP_FLOW.md](APP_FLOW.md)
 
 ### 6.4 Items Widgets
 
-- [ ] **Create features/items/presentation/widgets/item_card.dart**
-  - [ ] Display item thumbnail
-  - [ ] Show title (2 lines max)
-  - [ ] Category badge
-  - [ ] Availability indicator (green/red dot)
-  - [ ] Owner username
-  - [ ] Tap to navigate to detail
+- [✅] **Create features/items/presentation/widgets/item_card.dart**
+  - [✅] Display item thumbnail
+  - [✅] Show title (2 lines max)
+  - [✅] Category badge
+  - [✅] Availability indicator (green/red dot)
+  - [✅] Owner username
+  - [✅] Tap to navigate to detail
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
-- [ ] **Create features/items/presentation/widgets/category_filter.dart**
-  - [ ] Horizontal scrollable chips
-  - [ ] "All" chip + 4 category chips
-  - [ ] Active state highlighting
-  - [ ] Item count badges (optional)
-  - [ ] Handle filter selection
+- [✅] **Create features/items/presentation/widgets/category_filter.dart**
+  - [✅] Horizontal scrollable chips
+  - [✅] "All" chip + 4 category chips
+  - [✅] Active state highlighting
+  - [✅] Item count badges (optional)
+  - [✅] Handle filter selection
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
 ### 6.5 Items UI - Detail Screen
 
-- [ ] **Create features/items/presentation/screens/item_detail_screen.dart**
-  - [ ] Large item image (full width)
-  - [ ] Item title
-  - [ ] Category badge
-  - [ ] Availability status
-  - [ ] Description text
-  - [ ] Owner information section:
-    - [ ] Avatar
-    - [ ] Username
-    - [ ] Neighborhood
-    - [ ] Items shared count
-  - [ ] "Ask to Borrow" button (if not owner)
-  - [ ] "Edit" button (if owner)
-  - [ ] Availability toggle (if owner)
-  - [ ] "View Owner's Items" link
+- [✅] **Create features/items/presentation/screens/item_detail_screen.dart**
+  - [✅] Large item image (full width)
+  - [✅] Item title
+  - [✅] Category badge
+  - [✅] Availability status
+  - [✅] Description text
+  - [✅] Owner information section:
+    - [✅] Avatar
+    - [✅] Username
+    - [✅] Neighborhood
+    - [✅] Items shared count
+  - [✅] "Ask to Borrow" button (if not owner)
+  - [✅] "Edit" button (if owner)
+  - [✅] Availability toggle (if owner)
+  - [✅] "View Owner's Items" link
   - 📚 Reference: [FEATURES.md](FEATURES.md), [APP_FLOW.md](APP_FLOW.md)
 
 ### 6.6 Search Functionality
 
-- [ ] **Add search to item feed**
-  - [ ] Search bar in app bar
-  - [ ] Real-time search as user types
-  - [ ] Search by title and description
-  - [ ] Clear search button
-  - [ ] Search history (optional)
+- [✅] **Add search to item feed**
+  - [✅] Search bar in app bar
+  - [✅] Real-time search as user types
+  - [✅] Search by title and description
+  - [✅] Clear search button
+  - [✅] Search history (optional)
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
 ⏱️ **Estimated Time:** 10-12 hours
-
+ 
 ---
 
 ## 📸 Phase 7: Snap-to-List Feature (Add Items)
 
 ### 7.1 Camera Integration
 
-- [ ] **Request camera permissions**
-  - [ ] Android: Update AndroidManifest.xml
-  - [ ] iOS: Update Info.plist with camera usage description
-  - [ ] iOS: Update Info.plist with photo library usage description
+- [✅] **Request camera permissions**
+  - [✅] Android: Update AndroidManifest.xml
+  - [✅] iOS: Update Info.plist with camera usage description
+  - [✅] iOS: Update Info.plist with photo library usage description
 
-- [ ] **Create features/items/presentation/widgets/item_image_picker.dart**
-  - [ ] Show camera/gallery options dialog
-  - [ ] Open camera with `camera` package
-  - [ ] Open gallery with `image_picker` package
-  - [ ] Display image preview
-  - [ ] Retake photo option
-  - [ ] Confirm and proceed to form
+- [✅] **Create features/items/presentation/widgets/item_image_picker.dart**
+  - [✅] Show camera/gallery options dialog
+  - [✅] Open camera with `camera` package
+  - [✅] Open gallery with `image_picker` package
+  - [✅] Display image preview
+  - [✅] Retake photo option
+  - [✅] Confirm and proceed to form
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
 ### 7.2 Add Item UI
 
-- [ ] **Create features/items/presentation/screens/add_item_screen.dart**
-  - [ ] Large image preview at top
-  - [ ] Change photo button
-  - [ ] Title text field (required, 3-60 chars)
-  - [ ] Description text field (optional, 500 chars max)
-  - [ ] Character counters
-  - [ ] Category selector (4 buttons with icons)
-  - [ ] Form validation
-  - [ ] "Publish Item" button
-  - [ ] Loading state during upload
-  - [ ] Success message & navigate back
+- [✅] **Create features/items/presentation/screens/add_item_screen.dart**
+  - [✅] Large image preview at top
+  - [✅] Change photo button
+  - [✅] Title text field (required, 3-60 chars)
+  - [✅] Description text field (optional, 500 chars max)
+  - [✅] Character counters
+  - [✅] Category selector (4 buttons with icons)
+  - [✅] Form validation
+  - [✅] "Publish Item" button
+  - [✅] Loading state during upload
+  - [✅] Success message & navigate back
   - 📚 Reference: [FEATURES.md](FEATURES.md), [APP_FLOW.md](APP_FLOW.md)
 
-- [ ] **Create features/items/presentation/widgets/category_selector.dart**
-  - [ ] 4 large buttons (Tools, Kitchen, Outdoor, Games)
-  - [ ] Icons and labels
-  - [ ] Single selection
-  - [ ] Visual feedback for selected state
+- [✅] **Create features/items/presentation/widgets/category_selector.dart**
+  - [✅] 4 large buttons (Tools, Kitchen, Outdoor, Games)
+  - [✅] Icons and labels
+  - [✅] Single selection
+  - [✅] Visual feedback for selected state
 
 ### 7.3 Image Upload Logic
 
-- [ ] **Implement image compression**
-  - [ ] Compress image to < 2MB
-  - [ ] Maintain reasonable quality
-  - [ ] Use `flutter_image_compress` package
+- [✅] **Implement image compression**
+  - [✅] Compress image to < 2MB
+  - [✅] Maintain reasonable quality
+  - [✅] Use `flutter_image_compress` package
 
-- [ ] **Implement thumbnail generation**
-  - [ ] Generate 300x300 thumbnail
-  - [ ] Crop to square (center)
+- [✅] **Implement thumbnail generation**
+  - [✅] Generate 300x300 thumbnail
+  - [✅] Crop to square (center)
 
-- [ ] **Implement upload to Supabase Storage**
-  - [ ] Upload full image to `item-images/{userId}/{itemId}_full.jpg`
-  - [ ] Upload thumbnail to `item-images/{userId}/{itemId}_thumb.jpg`
-  - [ ] Get public URLs
-  - [ ] Save URLs to database
-  - [ ] Handle upload errors
+- [✅] **Implement upload to Supabase Storage**
+  - [✅] Upload full image to `item-images/{userId}/{itemId}_full.jpg`
+  - [✅] Upload thumbnail to `item-images/{userId}/{itemId}_thumb.jpg`
+  - [✅] Get public URLs
+  - [✅] Save URLs to database
+  - [✅] Handle upload errors
   - 📚 Reference: [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)
 
 ### 7.4 Create Item in Database
 
-- [ ] **Save item to database**
-  - [ ] Call `createItem()` from repository
-  - [ ] Include all form data
-  - [ ] Set initial status to "Available"
-  - [ ] Link to current user
-  - [ ] Handle errors
-  - [ ] Show success feedback
+- [✅] **Save item to database**
+  - [✅] Call `createItem()` from repository
+  - [✅] Include all form data
+  - [✅] Set initial status to "Available"
+  - [✅] Link to current user
+  - [✅] Handle errors
+  - [✅] Show success feedback
 
 ⏱️ **Estimated Time:** 8-10 hours
 
@@ -577,43 +637,56 @@ CREATE POLICY "Users can delete own item images"
 
 ### 8.1 Toggle Widget
 
-- [ ] **Create features/items/presentation/widgets/availability_toggle.dart**
-  - [ ] Switch widget
-  - [ ] ON = Available (green), OFF = On Loan (red)
-  - [ ] Label: "Available to borrow"
-  - [ ] Only visible to item owner
-  - [ ] Haptic feedback on change
+- [✅] **Create features/items/presentation/widgets/availability_toggle.dart**
+  - [✅] Switch widget
+  - [✅] ON = Available (green), OFF = On Loan (red)
+  - [✅] Label: "Available to borrow"
+  - [✅] Only visible to item owner
+  - [✅] Haptic feedback on change
+  - [✅] CompactAvailabilityToggle variant for item cards
   - 📚 Reference: [FEATURES.md](FEATURES.md)
 
 ### 8.2 Toggle Logic
 
-- [ ] **Implement status update**
-  - [ ] Update item status in database
-  - [ ] Call `updateItem()` from repository
-  - [ ] Real-time update via Supabase
-  - [ ] Show confirmation dialog for "On Loan"
-  - [ ] Handle errors gracefully
+- [✅] **Implement status update**
+  - [✅] Update item status in database
+  - [✅] Call `updateItemStatus()` from repository
+  - [✅] Real-time update via Supabase
+  - [✅] Show confirmation dialog for "On Loan"
+  - [✅] Handle errors gracefully with snackbars
 
 ### 8.3 My Items Screen
 
-- [ ] **Create features/items/presentation/screens/my_items_screen.dart**
-  - [ ] List of current user's items
-  - [ ] Show all items (available + on loan)
-  - [ ] Quick toggle on each item card
-  - [ ] Swipe actions: Edit, Delete
-  - [ ] Status badges
-  - [ ] Empty state if no items
+- [✅] **Create features/items/presentation/screens/my_items_screen.dart**
+  - [✅] List of current user's items
+  - [✅] Show all items (available + on loan)
+  - [✅] Quick toggle on each item card (CompactAvailabilityToggle)
+  - [✅] Swipe actions: Edit, Delete
+  - [✅] Status badges with color indicators
+  - [✅] Empty state if no items
+  - [✅] Filter chips (All, Available, On Loan)
+  - [✅] Pull-to-refresh
   - 📚 Reference: [APP_FLOW.md](APP_FLOW.md)
 
 ### 8.4 Status Display
 
-- [ ] **Add status indicators to UI**
-  - [ ] Green dot for "Available"
-  - [ ] Red dot for "On Loan"
-  - [ ] Badge in item cards
-  - [ ] Filter option in feed (future)
+- [✅] **Add status indicators to UI**
+  - [✅] Green dot for "Available"
+  - [✅] Red dot for "On Loan"
+  - [✅] Badge in item cards (already existed)
+  - [✅] Filter chips in My Items screen
+  - [✅] Status badge in item detail screen
+  - [✅] AvailabilityToggle in item detail screen (owner only)
+
+### 8.5 Navigation & Integration
+
+- [✅] **Add My Items route to router**
+  - [✅] /my-items route configured
+  - [✅] MyItemsScreen imported
+  - [✅] Navigation button in item feed app bar (inventory icon)
 
 ⏱️ **Estimated Time:** 4-5 hours
+✅ **Status:** COMPLETE
 
 ---
 
@@ -1101,12 +1174,12 @@ CREATE POLICY "Users can delete own item images"
 
 ### Overall Completion: 0%
 
-- [ ] Phase 0: Pre-Development (100%)
-- [ ] Phase 1: Initial Setup (0%)
-- [ ] Phase 2: Supabase Configuration (0%)
-- [ ] Phase 3: Core Services (0%)
-- [ ] Phase 4: Theme & Widgets (0%)
-- [ ] Phase 5: Authentication (0%)
+- [✅] Phase 0: Pre-Development (100%)
+- [✅] Phase 1: Initial Setup (100%)
+- [✅] Phase 2: Supabase Configuration (100%)
+- [✅] Phase 3: Core Services (100%)
+- [✅] Phase 4: Theme & Widgets (100%)
+- [✅] Phase 5: Authentication (100%)
 - [ ] Phase 6: Items Feature (0%)
 - [ ] Phase 7: Snap-to-List (0%)
 - [ ] Phase 8: Availability Toggle (0%)

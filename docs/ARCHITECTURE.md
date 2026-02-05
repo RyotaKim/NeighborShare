@@ -1187,6 +1187,110 @@ SUPABASE_ANON_KEY=your-anon-key-here
 
 ---
 
+## 🔧 Common Patterns & Best Practices
+
+<details>
+<summary><b>Import Aliases for Color Classes</b></summary>
+
+When importing colors.dart in files that also import category_constants.dart, 
+use an alias to avoid conflicts:
+
+```dart
+import '../../../../core/constants/category_constants.dart';
+import '../../../../shared/theme/colors.dart' as theme_colors;
+
+// Usage:
+final categoryColor = theme_colors.CategoryColors.getColor(category);
+final statusColor = theme_colors.StatusColors.getColor(status);
+```
+
+</details>
+
+<details>
+<summary><b>Auth State Access</b></summary>
+
+Correct way to access user ID from auth state:
+
+```dart
+final authState = ref.watch(authStateProvider);
+final userId = authState.value?.session?.user.id;  // ✅ Correct
+
+// ❌ Wrong: authState.value?.uid
+// ❌ Wrong: authState.value?.user?.id
+```
+
+</details>
+
+<details>
+<summary><b>Supabase Query Filtering</b></summary>
+
+Chain filter methods before applying ordering and pagination:
+
+```dart
+// ✅ Correct:
+var query = _client.from('table').select();
+
+// Apply filters
+if (category != null) {
+  query = query.eq('category', category.toDbString());
+}
+
+if (searchQuery != null) {
+  query = query.or('title.ilike.%$searchQuery%,description.ilike.%$searchQuery%');
+}
+
+// Then apply ordering and pagination
+final response = await query
+    .order('created_at', ascending: false)
+    .range(offset, offset + limit - 1);
+```
+
+</details>
+
+<details>
+<summary><b>Empty State & Error Display Widgets</b></summary>
+
+Correct parameter names:
+
+```dart
+// Empty State
+EmptyState(
+  title: 'No items',
+  description: 'Description text',
+  actionButtonText: 'Add Item',  // ✅ Correct
+  onActionPressed: () {},         // ✅ Correct
+)
+
+// Error Display
+ErrorDisplay(
+  message: 'Error message',
+  onRetry: () {},  // No 'error' parameter
+)
+```
+
+</details>
+
+<details>
+<summary><b>Enum-Based Helper Methods</b></summary>
+
+Color helper classes provide enum-based methods for type safety:
+
+```dart
+// StatusColors accepts ItemStatus enum
+final color = theme_colors.StatusColors.getColor(ItemStatus.available);
+
+// CategoryColors accepts ItemCategory enum
+final color = theme_colors.CategoryColors.getColor(ItemCategory.tools);
+
+// Also provides static properties for direct access
+final toolsColor = theme_colors.CategoryColors.tools;
+final kitchenColor = theme_colors.CategoryColors.kitchen;
+```
+
+</details>
+
+---
+
 **Last Updated:** February 5, 2026  
 **Version:** 1.0.0  
 **Author:** NeighborShare Development Team
