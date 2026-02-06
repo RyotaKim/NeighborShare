@@ -11,8 +11,8 @@ class AuthRepository {
   AuthRepository() : _client = SupabaseService.client;
 
   /// Sign up a new user with email and password
-  /// Creates auth user and profile record
-  Future<UserModel> signUp({
+  /// Creates auth user; profile will be created on first login
+  Future<void> signUp({
     required String email,
     required String password,
     required String username,
@@ -20,6 +20,7 @@ class AuthRepository {
   }) async {
     try {
       // Sign up user with Supabase Auth
+      // Store username/fullName in user metadata for later profile creation
       final response = await _client.auth.signUp(
         email: email,
         password: password,
@@ -33,19 +34,17 @@ class AuthRepository {
         throw const AppAuthException(message: 'Failed to create account');
       }
 
-      // Profile is created automatically via database trigger
-      // Fetch the created profile
-      final profile = await getProfile(response.user!.id);
-      return profile;
-    } on AppAuthException catch (e) {
+      // Profile will be created on first sign-in after email verification
+      // because RLS requires an authenticated session (auth.uid() = id)
+    } on AuthException catch (e) {
       throw AppAuthException(
         message: e.message,
-        code: e.code,
+        code: e.statusCode,
         originalError: e,
       );
     } catch (e) {
       throw AppAuthException(
-        message: 'Failed to sign up. Please try again.',
+        message: 'Failed to sign up: ${e.toString()}',
         originalError: e,
       );
     }
@@ -66,9 +65,15 @@ class AuthRepository {
         throw const AppAuthException(message: 'Failed to sign in');
       }
 
-      // Fetch user profile
-      final profile = await getProfile(response.user!.id);
+      // Ensure profile exists (create if first login after signup)
+      final profile = await _ensureProfileExists(response.user!);
       return profile;
+    } on AuthException catch (e) {
+      throw AppAuthException(
+        message: e.message,
+        code: e.statusCode,
+        originalError: e,
+      );
     } on AppAuthException catch (e) {
       throw AppAuthException(
         message: e.message,
@@ -77,7 +82,7 @@ class AuthRepository {
       );
     } catch (e) {
       throw AppAuthException(
-        message: 'Failed to sign in. Please try again.',
+        message: 'Failed to sign in: ${e.toString()}',
         originalError: e,
       );
     }
@@ -101,14 +106,85 @@ class AuthRepository {
   }
 
   /// Get current user's profile
+  /// If user is authenticated but has no profile, creates one
   Future<UserModel?> getCurrentUser() async {
     try {
       final user = getCurrentAuthUser();
       if (user == null) return null;
 
-      return await getProfile(user.id);
+      return await _ensureProfileExists(user);
     } catch (e) {
       return null;
+    }
+  }
+
+  /// Ensure a profile exists for the given auth user
+  /// Creates the profile from user metadata if it doesn't exist yet
+  Future<UserModel> _ensureProfileExists(User user) async {
+    try {
+      // Try to fetch existing profile
+      final response = await _client
+          .from('profiles')
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (response != null) {
+        return UserModel.fromJson(response);
+      }
+
+      // Profile doesn't exist — create it from auth metadata
+      final metadata = user.userMetadata ?? {};
+      final username = metadata['username'] as String? ??
+          user.email?.split('@').first ??
+          'user_${user.id.substring(0, 8)}';
+      final fullName = metadata['full_name'] as String?;
+
+      final profileData = {
+        'id': user.id,
+        'username': username,
+        'full_name': fullName,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
+      final profileResponse = await _client
+          .from('profiles')
+          .insert(profileData)
+          .select()
+          .single();
+
+      return UserModel.fromJson(profileResponse);
+    } on PostgrestException catch (e) {
+      // If unique constraint violation on username, add a suffix and retry
+      if (e.code == '23505') {
+        final metadata = user.userMetadata ?? {};
+        final baseUsername = metadata['username'] as String? ??
+            user.email?.split('@').first ??
+            'user';
+        final uniqueUsername = '${baseUsername}_${DateTime.now().millisecondsSinceEpoch % 10000}';
+
+        final profileData = {
+          'id': user.id,
+          'username': uniqueUsername,
+          'full_name': metadata['full_name'] as String?,
+          'created_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
+        };
+
+        final profileResponse = await _client
+            .from('profiles')
+            .insert(profileData)
+            .select()
+            .single();
+
+        return UserModel.fromJson(profileResponse);
+      }
+      throw DatabaseException(
+        message: 'Failed to create user profile',
+        code: e.code,
+        originalError: e,
+      );
     }
   }
 

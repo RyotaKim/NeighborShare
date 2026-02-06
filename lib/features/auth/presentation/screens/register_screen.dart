@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../app/router.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/errors/error_handler.dart';
 import '../../../../shared/widgets/custom_button.dart';
@@ -58,7 +60,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     });
 
     try {
-      final success = await ref.read(authNotifierProvider.notifier).signUp(
+      await ref.read(authNotifierProvider.notifier).signUp(
             email: _emailController.text.trim(),
             password: _passwordController.text,
             username: _usernameController.text.trim(),
@@ -66,19 +68,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
       if (!mounted) return;
 
-      if (success) {
-        // Navigate to email verification screen
-        Navigator.pushReplacementNamed(
-          context,
-          '/email-verification',
-          arguments: _emailController.text.trim(),
-        );
-      } else {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'Registration failed. Please try again.';
-        });
-      }
+      // Navigate to email verification screen
+      context.go(
+        AppRoutes.emailVerification,
+        extra: _emailController.text.trim(),
+      );
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -89,7 +83,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _navigateToLogin() {
-    Navigator.pushReplacementNamed(context, '/login');
+    context.go(AppRoutes.login);
   }
 
   @override

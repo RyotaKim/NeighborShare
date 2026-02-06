@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../core/errors/app_exception.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 
@@ -56,7 +57,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   }
 
   /// Sign up with email, password, and username
-  Future<bool> signUp({
+  /// Only creates auth user; profile is created on first sign-in
+  Future<void> signUp({
     required String email,
     required String password,
     required String username,
@@ -65,18 +67,18 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     try {
       state = const AsyncValue.loading();
       
-      final user = await _repository.signUp(
+      await _repository.signUp(
         email: email,
         password: password,
         username: username,
         fullName: fullName,
       );
       
-      state = AsyncValue.data(user);
-      return true;
+      // User is signed up but not yet verified — no profile yet
+      state = const AsyncValue.data(null);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
-      return false;
+      rethrow;
     }
   }
 
@@ -97,7 +99,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       return true;
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
-      return false;
+      rethrow; // Re-throw to allow UI to show specific error message
     }
   }
 
@@ -123,7 +125,9 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   }) async {
     try {
       final currentUser = state.value;
-      if (currentUser == null) return false;
+      if (currentUser == null) {
+        throw const AppAuthException(message: 'No user logged in');
+      }
 
       state = const AsyncValue.loading();
       
@@ -140,7 +144,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       return true;
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
-      return false;
+      rethrow; // Re-throw to allow UI to show specific error message
     }
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../app/router.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/errors/error_handler.dart';
 import '../../../../shared/widgets/custom_button.dart';
@@ -45,32 +47,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     try {
-      final success = await ref.read(authNotifierProvider.notifier).signIn(
+      await ref.read(authNotifierProvider.notifier).signIn(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
 
       if (!mounted) return;
 
-      if (success) {
-        // Check if email is verified
-        final isVerified = ref.read(isEmailVerifiedProvider);
-        
-        if (!isVerified) {
-          setState(() {
-            _isLoading = false;
-            _errorMessage = 'Please verify your email before logging in.';
-          });
-          return;
-        }
-
-        // Navigate to home (handled by router)
-        // The router will redirect based on auth state
-      } else {
+      // Check if email is verified
+      final isVerified = ref.read(isEmailVerifiedProvider);
+      
+      if (!isVerified) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Login failed. Please try again.';
+          _errorMessage = 'Please verify your email before logging in.';
         });
+        return;
+      }
+
+      // Login successful - router will redirect to home
+      setState(() {
+        _isLoading = false;
+      });
+      
+      // Give router a moment to process, then navigate to home
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (mounted) {
+        context.go(AppRoutes.home);
       }
     } catch (e) {
       if (!mounted) return;
@@ -82,11 +85,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _navigateToRegister() {
-    Navigator.pushNamed(context, '/register');
+    context.push(AppRoutes.register);
   }
 
   void _navigateToForgotPassword() {
-    Navigator.pushNamed(context, '/forgot-password');
+    context.push(AppRoutes.forgotPassword);
   }
 
   @override

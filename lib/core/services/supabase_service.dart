@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../config/env.dart';
 
@@ -29,8 +30,9 @@ class SupabaseService {
       await Supabase.initialize(
         url: EnvConfig.supabaseUrl,
         anonKey: EnvConfig.supabaseAnonKey,
-        authOptions: const FlutterAuthClientOptions(
-          authFlowType: AuthFlowType.pkce,
+        authOptions: FlutterAuthClientOptions(
+          // Use implicit flow for web, PKCE for mobile/desktop
+          authFlowType: kIsWeb ? AuthFlowType.implicit : AuthFlowType.pkce,
         ),
         realtimeClientOptions: const RealtimeClientOptions(
           eventsPerSecond: 10,

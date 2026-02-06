@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../app/router.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/errors/error_handler.dart';
 import '../../../../shared/widgets/custom_button.dart';
@@ -65,7 +67,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
     });
 
     try {
-      final success = await ref.read(authNotifierProvider.notifier).updateProfile(
+      await ref.read(authNotifierProvider.notifier).updateProfile(
             username: _usernameController.text.trim(),
             fullName: _fullNameController.text.trim().isNotEmpty
                 ? _fullNameController.text.trim()
@@ -81,15 +83,8 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
       if (!mounted) return;
 
-      if (success) {
-        // Navigate to home feed
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'Failed to save profile. Please try again.';
-        });
-      }
+      // Navigate to home feed
+      context.go(AppRoutes.home);
     } catch (e) {
       if (!mounted) return;
       setState(() {

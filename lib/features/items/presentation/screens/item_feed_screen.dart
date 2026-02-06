@@ -177,6 +177,13 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
       title: const Text('NeighborShare'),
       actions: [
         IconButton(
+          icon: const Icon(Icons.chat_bubble_outline),
+          onPressed: () {
+            context.push('/conversations');
+          },
+          tooltip: 'Messages',
+        ),
+        IconButton(
           icon: const Icon(Icons.inventory_2_outlined),
           onPressed: () {
             context.push('/my-items');

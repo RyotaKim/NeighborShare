@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/category_constants.dart';
 import '../../../../shared/theme/colors.dart' as theme_colors;
 import '../../../../shared/widgets/loading_indicator.dart';
 import '../../../../shared/widgets/error_widget.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../chat/presentation/providers/conversations_provider.dart';
 import '../../data/models/item_model.dart';
 import '../providers/items_provider.dart';
 import '../providers/my_items_provider.dart';
@@ -58,8 +60,8 @@ class _ItemDetailContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final authState = ref.watch(authStateProvider);
-    final currentUserId = authState.value?.session?.user.id;
+    final currentUser = ref.watch(authenticatedUserProvider);
+    final currentUserId = currentUser?.id;
     final isOwner = currentUserId == item.ownerId;
 
     return CustomScrollView(
@@ -192,6 +194,15 @@ class _ItemDetailContent extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     _OwnerInfoCard(item: item, isOwner: isOwner),
+
+                    // Ask to Borrow button (non-owner, available items)
+                    if (!isOwner && item.isAvailable && currentUserId != null) ...[  
+                      const SizedBox(height: 24),
+                      _AskToBorrowButton(
+                        item: item,
+                        currentUserId: currentUserId,
+                      ),
+                    ],
 
                     const SizedBox(height: 100), // Space for bottom button
                   ],
@@ -386,3 +397,84 @@ class _OwnerInfoCard extends ConsumerWidget {
   }
 }
 
+/// "Ask to Borrow" button that creates/finds a conversation and navigates to chat
+class _AskToBorrowButton extends ConsumerStatefulWidget {
+  final ItemModel item;
+  final String currentUserId;
+
+  const _AskToBorrowButton({
+    required this.item,
+    required this.currentUserId,
+  });
+
+  @override
+  ConsumerState<_AskToBorrowButton> createState() =>
+      _AskToBorrowButtonState();
+}
+
+class _AskToBorrowButtonState extends ConsumerState<_AskToBorrowButton> {
+  bool _isLoading = false;
+
+  Future<void> _askToBorrow() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final conversation = await ref
+          .read(conversationNotifierProvider.notifier)
+          .getOrCreateConversation(
+            itemId: widget.item.id,
+            otherUserId: widget.item.ownerId,
+          );
+
+      if (mounted) {
+        context.push('/chat/${conversation.id}', extra: conversation);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to start conversation: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: FilledButton.icon(
+        onPressed: _isLoading ? null : _askToBorrow,
+        icon: _isLoading
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: colorScheme.onPrimary,
+                ),
+              )
+            : const Icon(Icons.chat_bubble_outline),
+        label: Text(
+          _isLoading ? 'Starting chat...' : 'Ask to Borrow',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
