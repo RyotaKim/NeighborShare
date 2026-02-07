@@ -119,7 +119,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Text(
                     'NeighborShare',
                     style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -127,7 +128,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Welcome back text
                   Text(
-                    'Welcome Back!',
+                    'Welcome back!',
                     style: theme.textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),

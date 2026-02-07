@@ -61,7 +61,7 @@ class StorageService {
         'thumbnailUrl': thumbnailUrl,
       };
     } catch (e) {
-      print('❌ Failed to upload item image: $e');
+      print('[Storage] Failed to upload item image: $e');
       rethrow;
     }
   }
@@ -91,7 +91,7 @@ class StorageService {
         path: avatarPath,
       );
     } catch (e) {
-      print('❌ Failed to upload avatar: $e');
+      print('[Storage] Failed to upload avatar: $e');
       rethrow;
     }
   }
@@ -110,7 +110,7 @@ class StorageService {
           .from(SupabaseConstants.itemImagesBucket)
           .remove([fullImagePath, thumbnailPath]);
     } catch (e) {
-      print('❌ Failed to delete item images: $e');
+      print('[Storage] Failed to delete item images: $e');
       rethrow;
     }
   }
@@ -124,7 +124,7 @@ class StorageService {
           .from(SupabaseConstants.avatarsBucket)
           .remove([avatarPath]);
     } catch (e) {
-      print('❌ Failed to delete avatar: $e');
+      print('[Storage] Failed to delete avatar: $e');
       rethrow;
     }
   }
@@ -146,7 +146,7 @@ class StorageService {
       
       await _supabase.storage.from(bucket).remove([path]);
     } catch (e) {
-      print('❌ Failed to delete file: $e');
+      print('[Storage] Failed to delete file: $e');
       rethrow;
     }
   }
@@ -168,7 +168,7 @@ class StorageService {
       final bytes = await _supabase.storage.from(bucket).download(path);
       return bytes;
     } catch (e) {
-      print('❌ Failed to download file: $e');
+      print('[Storage] Failed to download file: $e');
       rethrow;
     }
   }
@@ -182,7 +182,7 @@ class StorageService {
       final files = await _supabase.storage.from(bucket).list(path: path);
       return files;
     } catch (e) {
-      print('❌ Failed to list files: $e');
+      print('[Storage] Failed to list files: $e');
       rethrow;
     }
   }

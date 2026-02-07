@@ -8,7 +8,7 @@ class AppTextStyles {
   AppTextStyles._();
 
   // Font family
-  static const String fontFamily = 'Roboto';
+  static const String fontFamily = 'Satoshi';
 
   // Display styles (large, attention-grabbing text)
   static const TextStyle displayLarge = TextStyle(

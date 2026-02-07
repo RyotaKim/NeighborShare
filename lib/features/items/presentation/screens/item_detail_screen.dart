@@ -275,10 +275,9 @@ class _StatusPill extends StatelessWidget {
         children: [
           Text(
             isAvailable ? 'Available' : 'On Loan',
-            style: TextStyle(
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: color,
               fontWeight: FontWeight.w600,
-              fontSize: 14,
             ),
           ),
           const SizedBox(width: 6),

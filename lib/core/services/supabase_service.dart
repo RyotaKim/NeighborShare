@@ -39,9 +39,9 @@ class SupabaseService {
         ),
       );
       
-      print('✅ Supabase initialized successfully');
+      print('[Supabase] Initialized successfully');
     } catch (e) {
-      print('❌ Failed to initialize Supabase: $e');
+      print('[Supabase] Failed to initialize: $e');
       rethrow;
     }
   }

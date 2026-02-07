@@ -42,7 +42,7 @@ class ImageUtils {
       
       return File(compressedFile.path);
     } catch (e) {
-      print('❌ Image compression failed: $e');
+      print('[ImageUtils] Image compression failed: $e');
       rethrow;
     }
   }
@@ -76,7 +76,7 @@ class ImageUtils {
       
       return File(thumbnailFile.path);
     } catch (e) {
-      print('❌ Thumbnail generation failed: $e');
+      print('[ImageUtils] Thumbnail generation failed: $e');
       rethrow;
     }
   }
@@ -113,7 +113,7 @@ class ImageUtils {
       
       return true;
     } catch (e) {
-      print('❌ Image validation failed: $e');
+      print('[ImageUtils] Image validation failed: $e');
       return false;
     }
   }
@@ -123,7 +123,7 @@ class ImageUtils {
     try {
       return await file.length();
     } catch (e) {
-      print('❌ Failed to get file size: $e');
+      print('[ImageUtils] Failed to get file size: $e');
       return 0;
     }
   }

@@ -118,7 +118,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       ? null
                                       : Text(
                                           profile.username[0].toUpperCase(),
-                                          style: const TextStyle(
+                                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                             fontSize: 40,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -195,8 +195,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     const SizedBox(height: 8),
                     Text(
                       'Username cannot be changed',
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.grey[600],
                       ),
                     ),

@@ -154,7 +154,7 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
             ? 'Username is available'
             : '3-20 characters, letters, numbers, underscore',
         helperStyle: _isAvailable == true
-            ? TextStyle(color: Colors.green)
+            ? theme.textTheme.bodySmall?.copyWith(color: Colors.green)
             : null,
       ),
       validator: _validator,

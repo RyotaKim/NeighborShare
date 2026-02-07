@@ -132,9 +132,11 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                               if (isOwnProfile) ...[
                                 const SizedBox(height: 8),
-                                const Text(
+                                Text(
                                   'Tap the + button to add your first item',
-                                  style: TextStyle(color: Colors.grey),
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ],
                             ],

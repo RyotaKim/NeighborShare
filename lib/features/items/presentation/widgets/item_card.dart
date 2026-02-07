@@ -148,7 +148,7 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         isAvailable ? 'Available' : 'On Loan',
-        style: const TextStyle(
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
           color: Colors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,

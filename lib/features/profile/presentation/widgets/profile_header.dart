@@ -24,8 +24,7 @@ class ProfileHeader extends StatelessWidget {
                 ? null
                 : Text(
                     profile.username[0].toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 36,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -74,7 +73,7 @@ class ProfileHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     profile.neighborhood!,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.w500,
                     ),

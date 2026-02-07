@@ -26,7 +26,7 @@ class RealtimeService {
       
       return query;
     } catch (e) {
-      print('❌ Failed to subscribe to items: $e');
+      print('[Realtime] Failed to subscribe to items: $e');
       rethrow;
     }
   }
@@ -43,7 +43,7 @@ class RealtimeService {
           .eq('conversation_id', conversationId)
           .order('created_at', ascending: true);
     } catch (e) {
-      print('❌ Failed to subscribe to messages: $e');
+      print('[Realtime] Failed to subscribe to messages: $e');
       rethrow;
     }
   }
@@ -64,7 +64,7 @@ class RealtimeService {
           .stream(primaryKey: ['id'])
           .order('last_message_at', ascending: false);
     } catch (e) {
-      print('❌ Failed to subscribe to conversations: $e');
+      print('[Realtime] Failed to subscribe to conversations: $e');
       rethrow;
     }
   }
@@ -80,7 +80,7 @@ class RealtimeService {
           .stream(primaryKey: ['id'])
           .eq('id', itemId);
     } catch (e) {
-      print('❌ Failed to subscribe to item: $e');
+      print('[Realtime] Failed to subscribe to item: $e');
       rethrow;
     }
   }
@@ -97,7 +97,7 @@ class RealtimeService {
           .eq('user_id', userId)
           .order('created_at', ascending: false);
     } catch (e) {
-      print('❌ Failed to subscribe to user items: $e');
+      print('[Realtime] Failed to subscribe to user items: $e');
       rethrow;
     }
   }
@@ -113,7 +113,7 @@ class RealtimeService {
           .stream(primaryKey: ['conversation_id', 'user_id'])
           .eq('conversation_id', conversationId);
     } catch (e) {
-      print('❌ Failed to subscribe to conversation participants: $e');
+      print('[Realtime] Failed to subscribe to conversation participants: $e');
       rethrow;
     }
   }
@@ -124,7 +124,7 @@ class RealtimeService {
     try {
       await _supabase.removeAllChannels();
     } catch (e) {
-      print('❌ Failed to unsubscribe from channels: $e');
+      print('[Realtime] Failed to unsubscribe from channels: $e');
       rethrow;
     }
   }

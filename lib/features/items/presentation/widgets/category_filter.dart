@@ -108,7 +108,9 @@ class _CategoryIcon extends StatelessWidget {
             child: Center(
               child: Text(
                 icon,
-                style: const TextStyle(fontSize: 24),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontSize: 24,
+                ),
               ),
             ),
           ),

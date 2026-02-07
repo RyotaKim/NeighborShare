@@ -59,7 +59,8 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
         title: Text(
           'NeighborShare',
           style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -0.5,
             color: colorScheme.primary,
           ),
         ),

@@ -29,7 +29,7 @@ class AuthService {
       
       return response;
     } catch (e) {
-      print('❌ Sign up failed: $e');
+      print('[Auth] Sign up failed: $e');
       rethrow;
     }
   }
@@ -47,7 +47,7 @@ class AuthService {
       
       return response;
     } catch (e) {
-      print('❌ Sign in failed: $e');
+      print('[Auth] Sign in failed: $e');
       rethrow;
     }
   }
@@ -57,7 +57,7 @@ class AuthService {
     try {
       await _supabase.auth.signOut();
     } catch (e) {
-      print('❌ Sign out failed: $e');
+      print('[Auth] Sign out failed: $e');
       rethrow;
     }
   }
@@ -70,7 +70,7 @@ class AuthService {
         redirectTo: null, // Configure for deep linking if needed
       );
     } catch (e) {
-      print('❌ Password reset failed: $e');
+      print('[Auth] Password reset failed: $e');
       rethrow;
     }
   }
@@ -84,7 +84,7 @@ class AuthService {
       
       return response;
     } catch (e) {
-      print('❌ Update password failed: $e');
+      print('[Auth] Update password failed: $e');
       rethrow;
     }
   }
@@ -118,7 +118,7 @@ class AuthService {
         email: user.email!,
       );
     } catch (e) {
-      print('❌ Resend verification email failed: $e');
+      print('[Auth] Resend verification email failed: $e');
       rethrow;
     }
   }

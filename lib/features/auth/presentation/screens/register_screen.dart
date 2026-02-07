@@ -115,7 +115,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   Text(
                     'Join NeighborShare',
                     style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
                     ),
                     textAlign: TextAlign.center,
                   ),
