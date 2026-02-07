@@ -10,15 +10,13 @@ import '../widgets/item_card.dart';
 import '../widgets/category_filter.dart';
 
 /// Main feed screen showing browsable items
-/// 
-/// Features:
-/// - App bar with search icon
-/// - Category filter chips (horizontal scroll)
-/// - Grid view of items (2 columns)
-/// - Pull-to-refresh functionality
-/// - Empty state when no items
-/// - Loading state
-/// - FAB for adding item
+///
+/// Layout matches mockup:
+/// - App bar: "NeighborShare" title + profile icon
+/// - Persistent search bar below app bar
+/// - Circular category filter icons (Tools, Kitchen, Outdoor, Games)
+/// - 2-column item grid with rounded cards
+/// - Circular FAB (+) at bottom-right
 class ItemFeedScreen extends ConsumerStatefulWidget {
   const ItemFeedScreen({super.key});
 
@@ -31,7 +29,6 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
   String _searchQuery = '';
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
 
   @override
   void dispose() {
@@ -43,6 +40,7 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     // Create filter based on selected category and search query
     final filters = ItemsFilters(
@@ -54,11 +52,92 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
     final itemsAsync = ref.watch(itemsProvider(filters));
 
     return Scaffold(
-      appBar: _isSearching ? _buildSearchBar(theme) : _buildNormalAppBar(),
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        title: Text(
+          'NeighborShare',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.primary,
+          ),
+        ),
+        actions: [
+          // Profile icon
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: () => context.push('/profile'),
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: colorScheme.surfaceContainerHighest,
+                child: Icon(
+                  Icons.person,
+                  size: 20,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          // Category Filter
-          const SizedBox(height: 8),
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Container(
+              height: 44,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search for items...',
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+                    size: 20,
+                  ),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: colorScheme.onSurfaceVariant,
+                            size: 18,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                          },
+                        )
+                      : null,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  filled: false,
+                ),
+                style: theme.textTheme.bodyMedium,
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
+                },
+              ),
+            ),
+          ),
+
+          // Category Filter (circular icons)
           CategoryFilter(
             selectedCategory: _selectedCategory,
             onCategorySelected: (category) {
@@ -66,10 +145,10 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
                 _selectedCategory = category;
               });
             },
-            // Optional: Add item counts per category (future enhancement)
             itemCounts: null,
           ),
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 4),
 
           // Items Grid
           Expanded(
@@ -84,7 +163,7 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.4,
                         child: EmptyState(
                           icon: Icons.inventory_2_outlined,
                           title: _selectedCategory == null
@@ -95,13 +174,7 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
                               : 'Try selecting a different category or add your own items.',
                           actionButtonText: 'Add Item',
                           onActionPressed: () {
-                            // TODO: Navigate to add item screen in Phase 7
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Add Item screen coming in Phase 7!'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
+                            context.push('/add-item');
                           },
                         ),
                       ),
@@ -116,12 +189,16 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
                   },
                   child: GridView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.72,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
                     ),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -145,7 +222,7 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.4,
                       child: ErrorDisplay(
                         message: 'Failed to load items',
                         onRetry: () {
@@ -160,108 +237,30 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.push('/add-item');
         },
-        icon: const Icon(Icons.add),
-        label: const Text('Add Item'),
-        tooltip: 'Add a new item',
+        backgroundColor: colorScheme.primary,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add, size: 28),
       ),
-    );
-  }
-
-  /// Build normal app bar with search icon
-  PreferredSizeWidget _buildNormalAppBar() {
-    return AppBar(
-      title: const Text('NeighborShare'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.chat_bubble_outline),
-          onPressed: () {
-            context.push('/conversations');
-          },
-          tooltip: 'Messages',
-        ),
-        IconButton(
-          icon: const Icon(Icons.inventory_2_outlined),
-          onPressed: () {
-            context.push('/my-items');
-          },
-          tooltip: 'My Items',
-        ),
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            setState(() {
-              _isSearching = true;
-            });
-          },
-          tooltip: 'Search items',
-        ),
-      ],
-    );
-  }
-
-  /// Build search app bar
-  PreferredSizeWidget _buildSearchBar(ThemeData theme) {
-    return AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          setState(() {
-            _isSearching = false;
-            _searchQuery = '';
-            _searchController.clear();
-          });
-        },
-      ),
-      title: TextField(
-        controller: _searchController,
-        autofocus: true,
-        decoration: InputDecoration(
-          hintText: 'Search items...',
-          border: InputBorder.none,
-          hintStyle: theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-        ),
-        style: theme.textTheme.titleMedium,
-        onChanged: (value) {
-          setState(() {
-            _searchQuery = value;
-          });
-        },
-      ),
-      actions: [
-        if (_searchQuery.isNotEmpty)
-          IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              setState(() {
-                _searchQuery = '';
-                _searchController.clear();
-              });
-            },
-            tooltip: 'Clear search',
-          ),
-      ],
     );
   }
 
   /// Build loading skeleton for grid
   Widget _buildLoadingSkeleton() {
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        childAspectRatio: 0.72,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
       ),
-      itemCount: 6, // Show 6 skeleton cards
+      itemCount: 6,
       itemBuilder: (context, index) {
-        return _SkeletonCard();
+        return const _SkeletonCard();
       },
     );
   }
@@ -269,11 +268,24 @@ class _ItemFeedScreenState extends ConsumerState<ItemFeedScreen> {
 
 /// Skeleton card for loading state
 class _SkeletonCard extends StatelessWidget {
+  const _SkeletonCard();
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,56 +294,41 @@ class _SkeletonCard extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              color: colorScheme.surfaceVariant.withOpacity(0.5),
-              child: Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: colorScheme.primary.withOpacity(0.5),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
                 ),
               ),
             ),
           ),
-          
+
           // Info placeholder
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title placeholder
-                  Container(
-                    width: double.infinity,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceVariant.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color:
+                        colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  const SizedBox(height: 4),
-                  Container(
-                    width: 100,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceVariant.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  width: 80,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color:
+                        colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  
-                  const Spacer(),
-                  
-                  // Owner placeholder
-                  Container(
-                    width: 80,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceVariant.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

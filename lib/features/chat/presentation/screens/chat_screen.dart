@@ -10,15 +10,11 @@ import '../providers/messages_provider.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/chat_input.dart';
 
-/// Chat screen for a specific conversation
-///
-/// Features:
-/// - App bar with item thumbnail and title
-/// - Real-time message stream
-/// - Message bubbles (sent/received)
-/// - Chat input with send button
-/// - Auto-scroll to bottom on new messages
-/// - Keyboard handling
+/// Chat screen matching mockup:
+/// - App bar: back arrow + other user's avatar + their name
+/// - Message area: green sent bubbles, white received bubbles
+/// - Timestamps below message groups
+/// - Bottom input: text field, attachment icon, green send button
 class ChatScreen extends ConsumerStatefulWidget {
   final String conversationId;
   final ConversationModel? conversation;
@@ -41,7 +37,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      // If user scrolls up significantly, don't auto-scroll
       if (_scrollController.hasClients) {
         final maxScroll = _scrollController.position.maxScrollExtent;
         final currentScroll = _scrollController.offset;
@@ -81,66 +76,55 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final colorScheme = theme.colorScheme;
     final currentUser = ref.watch(authenticatedUserProvider);
     final currentUserId = currentUser?.id ?? '';
-    final messagesAsync = ref.watch(messagesStreamProvider(widget.conversationId));
+    final messagesAsync =
+        ref.watch(messagesStreamProvider(widget.conversationId));
     final sendState = ref.watch(sendMessageProvider);
     final isSending = sendState is AsyncLoading;
 
-    // Get conversation info
     final conversation = widget.conversation;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         titleSpacing: 0,
         title: Row(
           children: [
-            // Item thumbnail
-            if (conversation?.itemDisplayImageUrl != null) ...[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: conversation!.itemDisplayImageUrl!,
-                  width: 36,
-                  height: 36,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => Container(
-                    width: 36,
-                    height: 36,
-                    color: colorScheme.surfaceContainerHighest,
-                  ),
-                  errorWidget: (_, __, ___) => Container(
-                    width: 36,
-                    height: 36,
-                    color: colorScheme.surfaceContainerHighest,
-                    child: const Icon(Icons.image_outlined, size: 18),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-            ],
-
-            // Title and user info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    conversation?.itemTitle ?? 'Chat',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (conversation != null)
-                    Text(
-                      conversation.otherDisplayName,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+            // Other user's avatar
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: colorScheme.primaryContainer,
+              backgroundImage: conversation?.otherAvatarUrl != null
+                  ? CachedNetworkImageProvider(conversation!.otherAvatarUrl!)
+                  : null,
+              child: conversation?.otherAvatarUrl == null
+                  ? Text(
+                      (conversation?.otherDisplayName ?? 'U')[0].toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onPrimaryContainer,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
+                    )
+                  : null,
+            ),
+
+            const SizedBox(width: 10),
+
+            // Other user's name
+            Expanded(
+              child: Text(
+                conversation?.otherDisplayName ?? 'Chat',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -162,7 +146,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           Icon(
                             Icons.chat_bubble_outline,
                             size: 64,
-                            color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                            color: colorScheme.onSurfaceVariant
+                                .withOpacity(0.3),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -175,7 +160,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           Text(
                             'Say hello and ask about this item.',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
+                              color: colorScheme.onSurfaceVariant
+                                  .withOpacity(0.7),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -192,25 +178,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
                 return ListView.builder(
                   controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     final isMine = message.isSentBy(currentUserId);
 
-                    // Show avatar only for first message in a consecutive group
-                    final showAvatar = !isMine &&
-                        (index == 0 ||
-                            messages[index - 1].senderId != message.senderId);
-
                     // Show timestamp for last message in a consecutive group
+                    // or when there's a time gap > 5 minutes
                     final showTimestamp = index == messages.length - 1 ||
-                        messages[index + 1].senderId != message.senderId;
+                        messages[index + 1].senderId != message.senderId ||
+                        messages[index + 1]
+                                .createdAt
+                                .difference(message.createdAt)
+                                .inMinutes >
+                            5;
 
                     return MessageBubble(
                       message: message,
                       isMine: isMine,
-                      showAvatar: showAvatar,
                       showTimestamp: showTimestamp,
                     );
                   },
@@ -220,8 +207,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               error: (error, stack) => Center(
                 child: ErrorDisplay(
                   message: 'Failed to load messages',
-                  onRetry: () =>
-                      ref.invalidate(messagesStreamProvider(widget.conversationId)),
+                  onRetry: () => ref.invalidate(
+                      messagesStreamProvider(widget.conversationId)),
                 ),
               ),
             ),

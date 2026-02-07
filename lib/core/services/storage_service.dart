@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'supabase_service.dart';
 import '../constants/supabase_constants.dart';
 
 /// Service for handling file uploads and storage operations
@@ -9,7 +8,7 @@ import '../constants/supabase_constants.dart';
 class StorageService {
   final SupabaseClient _supabase;
   
-  StorageService() : _supabase = SupabaseService.client;
+  StorageService(this._supabase);
   
   /// Upload an item image (full size and thumbnail)
   /// Returns a map with 'imageUrl' and 'thumbnailUrl'
@@ -126,6 +125,28 @@ class StorageService {
           .remove([avatarPath]);
     } catch (e) {
       print('❌ Failed to delete avatar: $e');
+      rethrow;
+    }
+  }
+  
+  /// Delete a file from storage by its public URL
+  Future<void> deleteFile(String publicUrl) async {
+    try {
+      // Extract bucket and path from public URL
+      final uri = Uri.parse(publicUrl);
+      final pathSegments = uri.pathSegments;
+      
+      // URL format: /storage/v1/object/public/{bucket}/{path}
+      if (pathSegments.length < 5) {
+        throw Exception('Invalid storage URL format');
+      }
+      
+      final bucket = pathSegments[4];
+      final path = pathSegments.sublist(5).join('/');
+      
+      await _supabase.storage.from(bucket).remove([path]);
+    } catch (e) {
+      print('❌ Failed to delete file: $e');
       rethrow;
     }
   }

@@ -93,6 +93,17 @@ final isMyItemProvider = Provider.autoDispose
   );
 });
 
+/// Provider for fetching any user's items by their user ID
+final userItemsProvider = FutureProvider.autoDispose
+    .family<List<ItemModel>, String>((ref, userId) async {
+  final repository = ref.watch(itemRepositoryProvider);
+  
+  return repository.getMyItems(
+    userId: userId,
+    limit: 1000,
+  );
+});
+
 /// Filters for my items queries
 class MyItemsFilters {
   final int limit;

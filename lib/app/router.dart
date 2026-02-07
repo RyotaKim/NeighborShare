@@ -14,6 +14,8 @@ import '../features/items/presentation/screens/my_items_screen.dart';
 import '../features/chat/presentation/screens/conversations_screen.dart';
 import '../features/chat/presentation/screens/chat_screen.dart';
 import '../features/chat/data/models/conversation_model.dart';
+import '../features/profile/presentation/screens/profile_screen.dart';
+import '../features/profile/presentation/screens/edit_profile_screen.dart';
 
 // Routes constants
 class AppRoutes {
@@ -28,6 +30,9 @@ class AppRoutes {
   static const String myItems = '/my-items';
   static const String conversations = '/conversations';
   static const String chat = '/chat/:id';
+  static const String profile = '/profile';
+  static const String editProfile = '/edit-profile';
+  static const String userProfile = '/user/:userId';
 }
 
 // Router provider
@@ -132,6 +137,24 @@ final routerProvider = Provider<GoRouter>((ref) {
             conversationId: conversationId,
             conversation: conversation,
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.editProfile,
+        name: 'edit-profile',
+        builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/user/:userId',
+        name: 'user-profile',
+        builder: (context, state) {
+          final userId = state.pathParameters['userId']!;
+          return ProfileScreen(userId: userId);
         },
       ),
     ],

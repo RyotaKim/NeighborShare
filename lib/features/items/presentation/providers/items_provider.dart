@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/category_constants.dart';
 import '../../../../core/services/storage_service.dart';
+import '../../../../core/services/supabase_service.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/item_model.dart';
 import '../../data/repositories/item_repository.dart';
@@ -16,7 +17,7 @@ final itemRepositoryProvider = Provider<ItemRepository>((ref) {
 
 /// Provider for StorageService
 final storageServiceProvider = Provider<StorageService>((ref) {
-  return StorageService();
+  return StorageService(SupabaseService.client);
 });
 
 /// Provider for fetching all items with optional filters

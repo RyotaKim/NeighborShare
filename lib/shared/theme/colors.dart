@@ -8,15 +8,15 @@ class AppColors {
   AppColors._();
 
   // Primary Brand Colors
-  static const Color primary = Color(0xFF6750A4); // Purple
-  static const Color primaryVariant = Color(0xFF4F378B);
-  static const Color secondary = Color(0xFF625B71); // Purple grey
-  static const Color secondaryVariant = Color(0xFF4A4458);
+  static const Color primary = Color(0xFF43A047); // Green
+  static const Color primaryVariant = Color(0xFF2E7D32);
+  static const Color secondary = Color(0xFF5C6B5E); // Green grey
+  static const Color secondaryVariant = Color(0xFF3E4F40);
 
   // Background Colors (Light Theme)
-  static const Color backgroundLight = Color(0xFFFFFBFE);
-  static const Color surfaceLight = Color(0xFFFFFBFE);
-  static const Color surfaceVariantLight = Color(0xFFE7E0EC);
+  static const Color backgroundLight = Color(0xFFF5F9F5);
+  static const Color surfaceLight = Color(0xFFFFFFFF);
+  static const Color surfaceVariantLight = Color(0xFFE8F0E8);
 
   // Background Colors (Dark Theme)
   static const Color backgroundDark = Color(0xFF1C1B1F);
@@ -44,8 +44,8 @@ class AppColors {
   static const Color info = Color(0xFF2196F3); // Blue
 
   // Item Status Colors
-  static const Color available = Color(0xFF4CAF50); // Green - item is available
-  static const Color onLoan = Color(0xFFEF5350); // Red - item is on loan
+  static const Color available = Color(0xFF43A047); // Green - item is available
+  static const Color onLoan = Color(0xFFE8A44A); // Warm orange - item is on loan
   static const Color unavailable = Color(0xFF9E9E9E); // Grey - item is unavailable
 
   // Category Colors
